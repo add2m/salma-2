@@ -31,7 +31,6 @@
             justify-content: center;
             overflow: hidden;
             width: 100%;
-            position: relative;
         }
 
         /* أيقونات الخلفية */
@@ -63,43 +62,63 @@
             align-items: center;
             justify-content: center;
             width: 100%;
+            max-width: 600px;
             text-align: center;
         }
 
         .title {
-            font-size: clamp(1.2rem, 5vw, 2.2rem);
+            font-size: clamp(1.4rem, 6vw, 2.2rem);
             color: #ffffff;
             text-shadow: 0 0 15px var(--neon-pink);
             margin-bottom: 20px;
             animation: fadeIn 1s forwards;
-            padding: 0 10px;
         }
 
-        /* القلب المنقط الجديد بـ CSS خالص عشان ميعلقش */
+        /* حاوية القلب */
         .heart-wrapper {
             position: relative;
-            width: clamp(280px, 85vw, 550px);
-            height: clamp(250px, 75vw, 500px);
+            width: 280px; /* حجم ثابت للموبايل لضمان الظهور */
+            height: 250px;
             display: flex;
             align-items: center;
             justify-content: center;
-            animation: fadeIn 1.5s forwards 0.5s;
-            opacity: 0;
+            margin: 10px 0;
         }
 
+        /* القلب المنقط باستخدام SVG مباشرة لضمان الظهور */
         .dotted-heart {
             width: 100%;
             height: 100%;
             background-color: var(--primary-pink);
-            /* رسم القلب باستخدام ماسك ونقط CSS */
+            
+            /* تكرار التعريفات لضمان العمل على كل المتصفحات */
+            mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z'/%3E%3C/svg%3E");
             -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z'/%3E%3C/svg%3E");
+            
+            mask-size: contain;
             -webkit-mask-size: contain;
+            mask-repeat: no-repeat;
             -webkit-mask-repeat: no-repeat;
+            mask-position: center;
             -webkit-mask-position: center;
-            background-image: radial-gradient(circle, var(--primary-pink) 30%, transparent 40%);
-            background-size: 14px 14px; /* حجم النقط */
+
+            /* تأثير النقط */
+            background-image: radial-gradient(circle, var(--primary-pink) 35%, transparent 45%);
+            background-size: 15px 15px; 
+            
             filter: drop-shadow(0 0 15px var(--neon-pink));
             animation: heartPulse 1.8s infinite ease-in-out;
+        }
+
+        /* تكبير القلب في الشاشات الكبيرة */
+        @media (min-width: 600px) {
+            .heart-wrapper {
+                width: 500px;
+                height: 450px;
+            }
+            .dotted-heart {
+                background-size: 20px 20px;
+            }
         }
 
         .name-wrapper {
@@ -109,7 +128,7 @@
             gap: 15px;
             margin-top: 20px;
             opacity: 0;
-            animation: popIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards 2s;
+            animation: popIn 0.8s forwards 1s;
         }
 
         .name {
@@ -122,34 +141,23 @@
         .name-heart {
             font-size: clamp(1.8rem, 9vw, 3.5rem);
             color: var(--heart-red);
-            filter: drop-shadow(0 0 10px var(--heart-red));
         }
 
-        /* Animations */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes heartPulse { 
+            0%, 100% { transform: scale(1); } 
+            50% { transform: scale(1.05); } 
         }
-
-        @keyframes heartPulse {
-            0%, 100% { transform: scale(1); filter: drop-shadow(0 0 15px var(--neon-pink)); }
-            50% { transform: scale(1.05); filter: drop-shadow(0 0 25px var(--neon-pink)); }
-        }
-
-        @keyframes popIn {
-            0% { opacity: 0; transform: scale(0.5); }
-            100% { opacity: 1; transform: scale(1); }
-        }
+        @keyframes popIn { from { opacity: 0; transform: scale(0.5); } to { opacity: 1; transform: scale(1); } }
     </style>
 </head>
 <body>
 
     <div class="background-icons">
         <span class="icon" style="left: 10%; top: 20%;">👩‍⚕️</span>
-        <span class="icon" style="left: 80%; top: 10%;">💖</span>
-        <span class="icon" style="left: 40%; top: 50%;">🏥</span>
-        <span class="icon" style="left: 20%; top: 80%;">🌸</span>
-        <span class="icon" style="left: 70%; top: 70%;">✨</span>
+        <span class="icon" style="left: 85%; top: 15%;">💖</span>
+        <span class="icon" style="left: 30%; top: 60%;">✨</span>
+        <span class="icon" style="left: 70%; top: 80%;">🌸</span>
     </div>
 
     <div class="content">

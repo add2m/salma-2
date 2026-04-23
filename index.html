@@ -29,7 +29,7 @@
             width: 100%;
         }
 
-        /* أيقونات الخلفية */
+        /* خلفية الأيقونات */
         .background-icons {
             position: absolute;
             width: 100%;
@@ -68,10 +68,9 @@
             animation: fadeIn 1s forwards;
         }
 
-        /* حاوية القلب السحرية */
+        /* حاوية القلب */
         #heart-container {
             position: relative;
-            /* حجم القلب ضخم في الكمبيوتر ومتناسب مع الموبايل */
             width: clamp(300px, 90vw, 600px);
             height: clamp(300px, 80vw, 550px);
             margin: 0 auto;
@@ -79,21 +78,22 @@
 
         .dot {
             position: absolute;
-            width: clamp(6px, 1.5vw, 10px);
-            height: clamp(6px, 1.5vw, 10px);
+            width: 10px; /* نقط أوضح وأكبر */
+            height: 10px;
             background-color: var(--primary-pink);
             border-radius: 50%;
             opacity: 0;
-            filter: drop-shadow(0 0 5px var(--neon-pink));
-            animation: appear 1.5s forwards;
+            box-shadow: 0 0 10px var(--neon-pink), 0 0 20px var(--primary-pink);
+            transform: scale(0);
+            animation: drawHeart 0.5s forwards;
         }
 
-        @keyframes appear {
-            0% { opacity: 0; transform: scale(0) translate(0, 0); }
+        @keyframes drawHeart {
+            0% { opacity: 0; transform: scale(0); }
             100% { opacity: 1; transform: scale(1); }
         }
 
-        /* النبض للقلب كله بعد ما يتكون */
+        /* نبض القلب بالكامل */
         .pulse-animation {
             animation: heartPulse 2s infinite ease-in-out;
         }
@@ -105,14 +105,14 @@
             gap: 15px;
             margin-top: 30px;
             opacity: 0;
-            animation: popIn 0.8s forwards 3s; /* يظهر بعد ما النقط تتجمع */
+            animation: popIn 0.8s forwards 3.5s; /* يظهر بعد اكتمال الرسم */
         }
 
         .name {
             font-family: 'Lemonada', cursive;
             font-size: clamp(2rem, 10vw, 4rem);
             color: var(--primary-pink);
-            text-shadow: 0 0 20px var(--neon-pink);
+            text-shadow: 0 0 25px var(--neon-pink);
         }
 
         .name-heart {
@@ -120,12 +120,12 @@
             color: var(--heart-red);
         }
 
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         @keyframes heartPulse { 
             0%, 100% { transform: scale(1); } 
             50% { transform: scale(1.05); } 
         }
         @keyframes popIn { from { opacity: 0; transform: scale(0.5); } to { opacity: 1; transform: scale(1); } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
 </head>
 <body>
@@ -150,15 +150,13 @@
 
     <script>
         const container = document.getElementById('heart-container');
-        const numDots = 350; // عدد النقط
+        const numDots = 250; // كثافة مناسبة عشان ميهنجش
 
         function createHeart() {
             const width = container.offsetWidth;
             const height = container.offsetHeight;
             const centerX = width / 2;
             const centerY = height / 2;
-            
-            // مقياس الرسم بناءً على حجم الشاشة (أكبر 3 مرات)
             const scale = width / 30; 
 
             for (let i = 0; i < numDots; i++) {
@@ -166,21 +164,18 @@
                 dot.className = 'dot';
                 
                 const angle = (i / numDots) * Math.PI * 2;
-                
-                // معادلة القلب الرياضية
                 const x = 16 * Math.pow(Math.sin(angle), 3);
                 const y = -(13 * Math.cos(angle) - 5 * Math.cos(2 * angle) - 2 * Math.cos(3 * angle) - Math.cos(4 * angle));
 
                 dot.style.left = (centerX + x * scale) + 'px';
                 dot.style.top = (centerY + y * scale) + 'px';
                 
-                // تأخير عشوائي عشان النقط تظهر واحدة ورا التانية بشكل احترافي
-                dot.style.animationDelay = (Math.random() * 2 + 0.5) + 's';
+                // السر في الترتيب: النقط بتظهر ورا بعضها بالظبط عشان "ترسم" المحيط
+                dot.style.animationDelay = (i * 0.01 + 0.5) + 's';
                 
                 container.appendChild(dot);
             }
 
-            // تفعيل النبض بعد انتهاء التكوين
             setTimeout(() => {
                 container.classList.add('pulse-animation');
             }, 3000);

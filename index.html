@@ -29,10 +29,12 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            overflow: hidden; /* يمنع التعليق والتحرك يمين وشمال */
+            overflow: hidden;
             width: 100%;
+            position: relative;
         }
 
+        /* أيقونات الخلفية */
         .background-icons {
             position: absolute;
             width: 100%;
@@ -45,100 +47,97 @@
             position: absolute;
             font-size: 1.5rem;
             opacity: 0.1;
-            animation: floatUp linear infinite;
+            animation: floatUp 15s linear infinite;
         }
 
         @keyframes floatUp {
-            from { transform: translateY(110vh); opacity: 0.15; }
+            from { transform: translateY(110vh); opacity: 0.1; }
             to { transform: translateY(-10vh); opacity: 0; }
         }
 
         .content {
             position: relative;
             z-index: 10;
-            text-align: center;
             display: flex;
             flex-direction: column;
             align-items: center;
+            justify-content: center;
             width: 100%;
-            padding: 10px;
+            text-align: center;
         }
 
         .title {
-            font-size: clamp(1.2rem, 5vw, 2.2rem); /* حجم خط مرن للموبايل والكمبيوتر */
+            font-size: clamp(1.2rem, 5vw, 2.2rem);
             color: #ffffff;
             text-shadow: 0 0 15px var(--neon-pink);
-            margin-bottom: 2vh;
-            animation: dropDown 1s forwards;
-            width: 90%;
+            margin-bottom: 20px;
+            animation: fadeIn 1s forwards;
+            padding: 0 10px;
         }
 
-        /* حاوية القلب - بقت مرنة */
-        .heart-container {
-            width: clamp(280px, 80vw, 600px); 
-            height: clamp(250px, 70vh, 550px);
+        /* القلب المنقط الجديد بـ CSS خالص عشان ميعلقش */
+        .heart-wrapper {
             position: relative;
+            width: clamp(280px, 85vw, 550px);
+            height: clamp(250px, 75vw, 500px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 1.5s forwards 0.5s;
             opacity: 0;
-            animation: fadeInContainer 1s forwards 0.5s;
         }
 
-        .heart-dot {
-            position: absolute;
-            width: clamp(4px, 1.5vw, 10px);
-            height: clamp(4px, 1.5vw, 10px);
+        .dotted-heart {
+            width: 100%;
+            height: 100%;
             background-color: var(--primary-pink);
-            border-radius: 50%;
-            filter: drop-shadow(0 0 5px rgba(245, 0, 87, 0.8));
-            opacity: 0;
-            animation: cloudForm 1.5s forwards;
-        }
-
-        .heart-container.formed {
-            animation: heartPulse 2s infinite ease-in-out;
+            /* رسم القلب باستخدام ماسك ونقط CSS */
+            -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z'/%3E%3C/svg%3E");
+            -webkit-mask-size: contain;
+            -webkit-mask-repeat: no-repeat;
+            -webkit-mask-position: center;
+            background-image: radial-gradient(circle, var(--primary-pink) 30%, transparent 40%);
+            background-size: 14px 14px; /* حجم النقط */
+            filter: drop-shadow(0 0 15px var(--neon-pink));
+            animation: heartPulse 1.8s infinite ease-in-out;
         }
 
         .name-wrapper {
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
-            margin-top: 2vh;
+            gap: 15px;
+            margin-top: 20px;
             opacity: 0;
-            animation: popIn 1s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards 3s;
-            width: 100%;
+            animation: popIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards 2s;
         }
 
         .name {
             font-family: 'Lemonada', cursive;
-            font-size: clamp(1.8rem, 8vw, 3.5rem);
+            font-size: clamp(2rem, 10vw, 4rem);
             color: var(--primary-pink);
             text-shadow: 0 0 20px var(--neon-pink);
         }
 
         .name-heart {
-            font-size: clamp(1.5rem, 7vw, 3rem);
+            font-size: clamp(1.8rem, 9vw, 3.5rem);
             color: var(--heart-red);
+            filter: drop-shadow(0 0 10px var(--heart-red));
         }
 
-        @keyframes dropDown {
-            0% { opacity: 0; transform: translateY(-20px); }
-            100% { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes fadeInContainer { to { opacity: 1; } }
-
-        @keyframes cloudForm {
-            0% { opacity: 0; transform: scale(0) translate(-20px, -20px); }
-            100% { opacity: 1; transform: scale(1) translate(0, 0); }
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         @keyframes heartPulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.03); }
+            0%, 100% { transform: scale(1); filter: drop-shadow(0 0 15px var(--neon-pink)); }
+            50% { transform: scale(1.05); filter: drop-shadow(0 0 25px var(--neon-pink)); }
         }
 
         @keyframes popIn {
-            0% { opacity: 0; transform: scale(0); }
+            0% { opacity: 0; transform: scale(0.5); }
             100% { opacity: 1; transform: scale(1); }
         }
     </style>
@@ -146,44 +145,18 @@
 <body>
 
     <div class="background-icons">
-        <span class="icon" style="left: 10%; animation-duration: 12s;">👩‍⚕️</span>
-        <span class="icon" style="left: 25%; animation-duration: 15s;">💖</span>
-        <span class="icon" style="left: 45%; animation-duration: 10s;">✨</span>
-        <span class="icon" style="left: 70%; animation-duration: 14s;">🌸</span>
-        <span class="icon" style="left: 85%; animation-duration: 11s;">🏥</span>
+        <span class="icon" style="left: 10%; top: 20%;">👩‍⚕️</span>
+        <span class="icon" style="left: 80%; top: 10%;">💖</span>
+        <span class="icon" style="left: 40%; top: 50%;">🏥</span>
+        <span class="icon" style="left: 20%; top: 80%;">🌸</span>
+        <span class="icon" style="left: 70%; top: 70%;">✨</span>
     </div>
 
     <div class="content">
         <h2 class="title">يا رب تقومي بالسلامة يا سلمى</h2>
         
-        <div class="heart-container" id="heart">
-            <script>
-                const heart = document.getElementById('heart');
-                const numDots = 400; 
-
-                // حسابات مرنة للموبايل
-                const isMobile = window.innerWidth < 600;
-                const centerX = heart.offsetWidth / 2;
-                const centerY = heart.offsetHeight / 2;
-                const scale = isMobile ? (window.innerWidth / 45) : 16; 
-
-                for (let i = 0; i < numDots; i++) {
-                    const dot = document.createElement('div');
-                    dot.className = 'heart-dot';
-                    
-                    const angle = (i / numDots) * Math.PI * 2;
-                    const x = 16 * Math.pow(Math.sin(angle), 3);
-                    const y = -(13 * Math.cos(angle) - 5 * Math.cos(2 * angle) - 2 * Math.cos(3 * angle) - Math.cos(4 * angle));
-
-                    dot.style.left = (centerX + x * scale) + 'px';
-                    dot.style.top = (centerY + y * scale) + 'px';
-                    
-                    dot.style.animationDelay = (Math.random() * 1.5 + 1) + 's';
-                    heart.appendChild(dot);
-                }
-
-                setTimeout(() => { heart.classList.add('formed'); }, 2500);
-            </script>
+        <div class="heart-wrapper">
+            <div class="dotted-heart"></div>
         </div>
 
         <div class="name-wrapper">

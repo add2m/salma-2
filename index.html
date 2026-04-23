@@ -58,14 +58,18 @@
             align-items: center;
             width: 100%;
             text-align: center;
+            padding-top: 20px;
         }
 
+        /* تعديل الجملة اللي فوق عشان تظهر فوراً وتكون واضحة */
         .title {
-            font-size: clamp(1.4rem, 6vw, 2.2rem);
+            font-size: clamp(1.4rem, 6vw, 2.5rem);
             color: #ffffff;
-            text-shadow: 0 0 15px var(--neon-pink);
+            text-shadow: 0 0 20px var(--neon-pink), 0 0 10px rgba(0,0,0,0.5);
             margin-bottom: 20px;
-            animation: fadeIn 1s forwards;
+            opacity: 1; /* خليتها ظاهرة علطول */
+            font-weight: 800;
+            z-index: 20;
         }
 
         /* حاوية القلب */
@@ -78,12 +82,12 @@
 
         .dot {
             position: absolute;
-            width: 10px; /* نقط أوضح وأكبر */
+            width: 10px;
             height: 10px;
             background-color: var(--primary-pink);
             border-radius: 50%;
             opacity: 0;
-            box-shadow: 0 0 10px var(--neon-pink), 0 0 20px var(--primary-pink);
+            box-shadow: 0 0 12px var(--neon-pink), 0 0 25px var(--primary-pink);
             transform: scale(0);
             animation: drawHeart 0.5s forwards;
         }
@@ -93,7 +97,6 @@
             100% { opacity: 1; transform: scale(1); }
         }
 
-        /* نبض القلب بالكامل */
         .pulse-animation {
             animation: heartPulse 2s infinite ease-in-out;
         }
@@ -105,19 +108,20 @@
             gap: 15px;
             margin-top: 30px;
             opacity: 0;
-            animation: popIn 0.8s forwards 3.5s; /* يظهر بعد اكتمال الرسم */
+            animation: popIn 0.8s forwards 3.8s; /* بتظهر بعد ما الرسم يخلص */
         }
 
         .name {
             font-family: 'Lemonada', cursive;
-            font-size: clamp(2rem, 10vw, 4rem);
+            font-size: clamp(2rem, 10vw, 4.5rem);
             color: var(--primary-pink);
-            text-shadow: 0 0 25px var(--neon-pink);
+            text-shadow: 0 0 30px var(--neon-pink);
         }
 
         .name-heart {
             font-size: clamp(1.8rem, 9vw, 3.5rem);
             color: var(--heart-red);
+            filter: drop-shadow(0 0 10px var(--heart-red));
         }
 
         @keyframes heartPulse { 
@@ -125,7 +129,6 @@
             50% { transform: scale(1.05); } 
         }
         @keyframes popIn { from { opacity: 0; transform: scale(0.5); } to { opacity: 1; transform: scale(1); } }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
 </head>
 <body>
@@ -133,7 +136,7 @@
     <div class="background-icons">
         <span class="icon" style="left: 10%; top: 20%;">👩‍⚕️</span>
         <span class="icon" style="left: 85%; top: 15%;">💖</span>
-        <span class="icon" style="left: 30%; top: 60%;">🏥</span>
+        <span class="icon" style="left: 30%; top: 60%;">✨</span>
         <span class="icon" style="left: 70%; top: 80%;">🌸</span>
     </div>
 
@@ -150,7 +153,7 @@
 
     <script>
         const container = document.getElementById('heart-container');
-        const numDots = 250; // كثافة مناسبة عشان ميهنجش
+        const numDots = 250; 
 
         function createHeart() {
             const width = container.offsetWidth;
@@ -170,15 +173,15 @@
                 dot.style.left = (centerX + x * scale) + 'px';
                 dot.style.top = (centerY + y * scale) + 'px';
                 
-                // السر في الترتيب: النقط بتظهر ورا بعضها بالظبط عشان "ترسم" المحيط
-                dot.style.animationDelay = (i * 0.01 + 0.5) + 's';
+                // النقط تترسم بالترتيب بعد نص ثانية من فتح الصفحة
+                dot.style.animationDelay = (i * 0.012 + 0.5) + 's';
                 
                 container.appendChild(dot);
             }
 
             setTimeout(() => {
                 container.classList.add('pulse-animation');
-            }, 3000);
+            }, 3500);
         }
 
         window.onload = createHeart;

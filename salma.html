@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>يا رب تقومي بالسلامة يا سلمى</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@700&family=Lemonada:wght@600&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-pink: #ff80ab;
+            --neon-pink: #f50057;
+            --bg-dark: #12080e; 
+            --heart-red: #ff1744;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: #ffffff;
+            font-family: 'Cairo', sans-serif;
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-evenly; /* توزيع العناصر بشكل متوازن */
+            overflow: hidden;
+        }
+
+        /* الخلفية المتحركة */
+        .background-icons {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .icon {
+            position: absolute;
+            font-size: 1.8rem;
+            opacity: 0.1;
+            animation: floatUp linear infinite;
+        }
+
+        @keyframes floatUp {
+            from { transform: translateY(110vh) rotate(-20deg); opacity: 0.15; }
+            to { transform: translateY(-10vh) rotate(20deg); opacity: 0; }
+        }
+
+        .content {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+
+        .title {
+            font-size: 2.2rem;
+            color: #ffffff;
+            text-shadow: 0 0 15px var(--neon-pink);
+            margin-bottom: 20px;
+            animation: dropDown 1s forwards;
+        }
+
+        /* حاوية القلب الضخم (أكبر 3 مرات) */
+        .heart-container {
+            width: 600px; /* حجم ضخم */
+            height: 550px; 
+            position: relative;
+            opacity: 0;
+            animation: fadeInContainer 1s forwards 0.5s;
+        }
+
+        .heart-dot {
+            position: absolute;
+            width: 12px; /* نقط أكبر قليلاً لتناسب الحجم */
+            height: 12px;
+            background-color: var(--primary-pink);
+            border-radius: 50%;
+            filter: drop-shadow(0 0 8px rgba(245, 0, 87, 0.8));
+            opacity: 0;
+            animation: cloudForm 1.5s forwards;
+        }
+
+        .heart-container.formed {
+            animation: 
+                fadeInContainer 1s forwards, 
+                heartPulse 2s infinite ease-in-out;
+        }
+
+        .name-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-top: 30px;
+            opacity: 0;
+            animation: popIn 1s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards 3s;
+        }
+
+        .name {
+            font-family: 'Lemonada', cursive;
+            font-size: 4rem; /* اسم أكبر */
+            color: var(--primary-pink);
+            text-shadow: 0 0 25px var(--neon-pink);
+        }
+
+        .name-heart {
+            font-size: 3.5rem;
+            color: var(--heart-red);
+            filter: drop-shadow(0 0 15px var(--heart-red));
+        }
+
+        /* الأنيميشن */
+        @keyframes dropDown {
+            0% { opacity: 0; transform: translateY(-30px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInContainer {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes cloudForm {
+            0% { opacity: 0; transform: scale(0) translate(-100px, -100px); }
+            100% { opacity: 1; transform: scale(1) translate(0, 0); }
+        }
+
+        @keyframes heartPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes popIn {
+            0% { opacity: 0; transform: scale(0); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="background-icons">
+        <span class="icon" style="left: 10%; animation-duration: 12s;">👩‍⚕️</span>
+        <span class="icon" style="left: 25%; animation-duration: 15s;">💖</span>
+        <span class="icon" style="left: 45%; animation-duration: 10s;">✨</span>
+        <span class="icon" style="left: 70%; animation-duration: 14s;">🌸</span>
+        <span class="icon" style="left: 85%; animation-duration: 11s;">🏥</span>
+    </div>
+
+    <div class="content">
+        <h2 class="title">يا رب تقومي بالسلامة يا سلمى</h2>
+        
+        <div class="heart-container" id="heart">
+            <script>
+                const heart = document.getElementById('heart');
+                const numDots = 450; // زيادة عدد النقط لتغطية المساحة الكبيرة
+
+                for (let i = 0; i < numDots; i++) {
+                    const dot = document.createElement('div');
+                    dot.className = 'heart-dot';
+                    
+                    const angle = (i / numDots) * Math.PI * 2;
+                    const scale = 16; // زيادة مقياس الرسم 3 مرات تقريباً
+
+                    const x = 16 * Math.pow(Math.sin(angle), 3);
+                    const y = -(13 * Math.cos(angle) - 5 * Math.cos(2 * angle) - 2 * Math.cos(3 * angle) - Math.cos(4 * angle));
+
+                    // 300 و 250 هي نقطة المركز الجديدة للحاوية الكبيرة
+                    dot.style.left = (300 + x * scale) + 'px';
+                    dot.style.top = (250 + y * scale) + 'px';
+                    
+                    dot.style.animationDelay = (Math.random() * 1.5 + 1) + 's';
+                    heart.appendChild(dot);
+                }
+
+                setTimeout(() => {
+                    heart.classList.add('formed');
+                }, 2500);
+            </script>
+        </div>
+
+        <div class="name-wrapper">
+            <div class="name">سلمى</div>
+            <div class="name-heart">❤️</div>
+        </div>
+    </div>
+
+</body>
+</html>

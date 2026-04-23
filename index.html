@@ -14,11 +14,7 @@
             --heart-red: #ff1744;
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
             background-color: var(--bg-dark);
@@ -60,9 +56,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
             width: 100%;
-            max-width: 600px;
             text-align: center;
         }
 
@@ -74,51 +68,34 @@
             animation: fadeIn 1s forwards;
         }
 
-        /* حاوية القلب */
-        .heart-wrapper {
+        /* حاوية القلب السحرية */
+        #heart-container {
             position: relative;
-            width: 280px; /* حجم ثابت للموبايل لضمان الظهور */
-            height: 250px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 10px 0;
+            /* حجم القلب ضخم في الكمبيوتر ومتناسب مع الموبايل */
+            width: clamp(300px, 90vw, 600px);
+            height: clamp(300px, 80vw, 550px);
+            margin: 0 auto;
         }
 
-        /* القلب المنقط باستخدام SVG مباشرة لضمان الظهور */
-        .dotted-heart {
-            width: 100%;
-            height: 100%;
+        .dot {
+            position: absolute;
+            width: clamp(6px, 1.5vw, 10px);
+            height: clamp(6px, 1.5vw, 10px);
             background-color: var(--primary-pink);
-            
-            /* تكرار التعريفات لضمان العمل على كل المتصفحات */
-            mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z'/%3E%3C/svg%3E");
-            -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z'/%3E%3C/svg%3E");
-            
-            mask-size: contain;
-            -webkit-mask-size: contain;
-            mask-repeat: no-repeat;
-            -webkit-mask-repeat: no-repeat;
-            mask-position: center;
-            -webkit-mask-position: center;
-
-            /* تأثير النقط */
-            background-image: radial-gradient(circle, var(--primary-pink) 35%, transparent 45%);
-            background-size: 15px 15px; 
-            
-            filter: drop-shadow(0 0 15px var(--neon-pink));
-            animation: heartPulse 1.8s infinite ease-in-out;
+            border-radius: 50%;
+            opacity: 0;
+            filter: drop-shadow(0 0 5px var(--neon-pink));
+            animation: appear 1.5s forwards;
         }
 
-        /* تكبير القلب في الشاشات الكبيرة */
-        @media (min-width: 600px) {
-            .heart-wrapper {
-                width: 500px;
-                height: 450px;
-            }
-            .dotted-heart {
-                background-size: 20px 20px;
-            }
+        @keyframes appear {
+            0% { opacity: 0; transform: scale(0) translate(0, 0); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        /* النبض للقلب كله بعد ما يتكون */
+        .pulse-animation {
+            animation: heartPulse 2s infinite ease-in-out;
         }
 
         .name-wrapper {
@@ -126,9 +103,9 @@
             align-items: center;
             justify-content: center;
             gap: 15px;
-            margin-top: 20px;
+            margin-top: 30px;
             opacity: 0;
-            animation: popIn 0.8s forwards 1s;
+            animation: popIn 0.8s forwards 3s; /* يظهر بعد ما النقط تتجمع */
         }
 
         .name {
@@ -156,16 +133,14 @@
     <div class="background-icons">
         <span class="icon" style="left: 10%; top: 20%;">👩‍⚕️</span>
         <span class="icon" style="left: 85%; top: 15%;">💖</span>
-        <span class="icon" style="left: 30%; top: 60%;">✨</span>
+        <span class="icon" style="left: 30%; top: 60%;">🏥</span>
         <span class="icon" style="left: 70%; top: 80%;">🌸</span>
     </div>
 
     <div class="content">
         <h2 class="title">يا رب تقومي بالسلامة يا سلمى</h2>
         
-        <div class="heart-wrapper">
-            <div class="dotted-heart"></div>
-        </div>
+        <div id="heart-container"></div>
 
         <div class="name-wrapper">
             <div class="name">سلمى</div>
@@ -173,5 +148,45 @@
         </div>
     </div>
 
+    <script>
+        const container = document.getElementById('heart-container');
+        const numDots = 350; // عدد النقط
+
+        function createHeart() {
+            const width = container.offsetWidth;
+            const height = container.offsetHeight;
+            const centerX = width / 2;
+            const centerY = height / 2;
+            
+            // مقياس الرسم بناءً على حجم الشاشة (أكبر 3 مرات)
+            const scale = width / 30; 
+
+            for (let i = 0; i < numDots; i++) {
+                const dot = document.createElement('div');
+                dot.className = 'dot';
+                
+                const angle = (i / numDots) * Math.PI * 2;
+                
+                // معادلة القلب الرياضية
+                const x = 16 * Math.pow(Math.sin(angle), 3);
+                const y = -(13 * Math.cos(angle) - 5 * Math.cos(2 * angle) - 2 * Math.cos(3 * angle) - Math.cos(4 * angle));
+
+                dot.style.left = (centerX + x * scale) + 'px';
+                dot.style.top = (centerY + y * scale) + 'px';
+                
+                // تأخير عشوائي عشان النقط تظهر واحدة ورا التانية بشكل احترافي
+                dot.style.animationDelay = (Math.random() * 2 + 0.5) + 's';
+                
+                container.appendChild(dot);
+            }
+
+            // تفعيل النبض بعد انتهاء التكوين
+            setTimeout(() => {
+                container.classList.add('pulse-animation');
+            }, 3000);
+        }
+
+        window.onload = createHeart;
+    </script>
 </body>
 </html>
